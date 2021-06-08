@@ -1,0 +1,93 @@
+Create table cliente(
+ id_cliente int4 not null,
+ nombre varchar(45) not null,
+ apellido varchar(45) not null,
+ contraseña varchar(50) not null,
+ direccion Varchar(50) not null,
+ telefono int4 not null,
+ constraint pk_cliente primary key (id_cliente)
+);
+
+Create table almacen
+(
+    id_almacen  int         not null,
+    id_producto int         not null,
+    id_provedor int         not null,
+    nombre      varchar(45) not null,
+    cantidad    int4 not null,
+    constraint pk_almacen primary key (id_almacen)
+);
+
+Create table producto (
+    id_producto int not null unique,
+    nombre varchar(45) not null,
+    categoria varchar(45) not null,
+    precio int8 not null,
+    descripcion varchar(70) not null,
+    almacen_id_almacen int not null,
+
+ constraint pk_producto primary key (id_producto,almacen_id_almacen),
+ constraint "fk_producto_almacen1" foreign key (almacen_id_almacen) references almacen(id_almacen)
+);
+
+create table venta(
+  id_venta int not null unique,
+  id_ciente int not null unique ,
+  id_vendedor int not null unique,
+  fecha date not null,
+  total int4 not null,
+  vendedor_id_vendedor int not null unique,
+
+  constraint pk_venta primary key (id_venta,vendedor_id_vendedor)
+);
+
+create table detalle_venta(
+    id_detalle_venta int not null unique,
+    id_producto varchar(45) not null unique,
+    cantidad int4 not null unique,
+    producto_id_producto int not null unique,
+    venta_id_venta int not null unique,
+    constraint pk_detalle primary key (id_detalle_venta,producto_id_producto,venta_id_venta),
+    constraint "fk_detalle venta_producto1" foreign key (producto_id_producto) references producto(id_producto),
+    constraint "fk_detalle venta_venta1" foreign key (venta_id_venta) references venta(id_venta)
+);
+
+create table proveedor (
+  id_proveedor int not null unique,
+  nombre varchar(45) not null unique,
+  constraint pk_proveedor primary key (id_proveedor)
+);
+
+create table factura(
+   id_factura int not null unique,
+   pago int4 not null unique,
+   fecha date not null ,
+   importe decimal(6,5) not null unique,
+  constraint pk_factura primary key (id_factura)
+);
+
+create table solicitud(
+  id_solicitud int4 not null unique,
+  id_factura int4 not null ,
+  id_producto VARCHAR(45) not null,
+  NIT VARCHAR(10) not null unique,
+  cliente_id_cliente int4 not null unique,
+  producto_id_producto int4 not null,
+  factura_id_factura int4 not null,
+
+  constraint pk_solicitud primary key (id_solicitud,cliente_id_cliente,producto_id_producto,factura_id_factura),
+  constraint "fk_solicitud_cliente" foreign key (cliente_id_cliente) references cliente(id_cliente),
+  constraint "fk_solicitud_factura1" foreign key (factura_id_factura) references factura(id_factura),
+  constraint "fk_solicitud_producto1" foreign key (producto_id_producto) references producto(id_producto)
+
+
+);
+
+create table proveedor_has_almacen (
+    provedor_id_provedor int not null,
+    almacen_id_almacen int not null,
+
+    constraint pk_proveedor_has_almacen primary key (provedor_id_provedor,almacen_id_almacen),
+    constraint "fk_provedor_has_almacen_provedor1" foreign key (provedor_id_provedor) references proveedor (id_proveedor),
+    constraint "fk_provedor_has_almacen_almacen1" foreign key (almacen_id_almacen) references almacen (id_almacen)
+);
