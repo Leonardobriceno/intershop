@@ -20,6 +20,28 @@ Create table almacen
     constraint uk_alma UNIQUE (cantidad)
 );
 
+create table categorias (
+  id_categorias int4 not null,
+  camisetas varchar (20)not null,
+  pantalones varchar (20) not null,
+  ropa_deportiva varchar (20) not null,
+  vestidos varchar (20) not null,
+  primary key (id_categorias)
+);
+
+create table venta(
+  id_venta int not null ,
+  id_cliente int not null  ,
+  id_vendedor int not null ,
+  fecha date not null,
+  total int4 not null,
+  vendedor_id_vendedor int not null ,
+
+  primary key (id_venta),
+  constraint uk_venta UNIQUE (id_cliente,id_vendedor,vendedor_id_vendedor),
+  constraint fk_cli_ven foreign key (id_venta) references cliente (id_cliente)
+);
+
 Create table producto (
 
     id_producto int4 not null ,
@@ -36,27 +58,9 @@ Create table producto (
  constraint fk_pro_ven foreign key (id_producto) references venta (id_venta)
 );
 
-create table venta(
-  id_venta int not null ,
-  id_cliente int not null  ,
-  id_vendedor int not null ,
-  fecha date not null,
-  total int4 not null,
-  vendedor_id_vendedor int not null ,
 
-  primary key (id_venta),
-  constraint uk_venta UNIQUE (id_cliente,id_vendedor,vendedor_id_vendedor),
-  constraint fk_cli_ven foreign key (id_venta) references cliente (id_cliente)            
-);
 
-create table categorias (
-  id_categorias int4 not null,
-  camisetas varchar (20)not null,
-  pantalones varchar (20) not null,
-  ropa_deportiva varchar (20) not null,
-  vestidos varchar (20) not null,
-  primary key (id_categorias)
-);
+
 
 create table detalle_venta(
     id_detalle_venta int not null,
@@ -115,6 +119,7 @@ create table proveedor_has_almacen (
 );
 
 /*Dml*/
+
 insert into cliente
 values ('01','Francisco','Lopez','pbf123','cr 21 i 11 sur','315871971');
 insert into cliente
@@ -226,6 +231,7 @@ Select * from solicitud;
 
 
 /*DDL*/
+
 select * from solicitud
 join factura
 on solicitud.id_factura = factura.id_factura;
@@ -270,8 +276,3 @@ Select * from almacen
 join proveedor
 on almacen.id_provedor = proveedor.id_proveedor
 where proveedor.id_proveedor = '4' and proveedor.nombre = 'Jhons';
-
-
-
-
-
